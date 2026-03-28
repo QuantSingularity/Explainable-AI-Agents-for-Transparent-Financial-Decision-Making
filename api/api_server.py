@@ -3,6 +3,7 @@ Production FastAPI REST API for XAI Agents
 Provides endpoints for model prediction and explanation generation
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -25,6 +26,41 @@ from xai.xai_methods import SHAPExplainer, LIMEExplainer, XAIMethodSelector
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Global model store (in production, use proper model registry)
+MODEL_STORE = {}
+EXPLAINER_CACHE = {}
+
+
+def _load_default_model():
+    """Create and store a simple default model."""
+    np.random.seed(42)
+    X_train = np.random.randn(1000, 10)
+    y_train = (X_train[:, 0] + X_train[:, 1] > 0).astype(int)
+
+    model = BaselineModel(model_type="logistic", random_state=42)
+    model.train(X_train, y_train)
+
+    MODEL_STORE["default"] = {
+        "model": model,
+        "type": "logistic",
+        "features": 10,
+        "background_data": X_train,
+    }
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application lifespan: load default model on startup."""
+    logger.info("Starting XAI Agents API...")
+    try:
+        _load_default_model()
+        logger.info("Default model loaded successfully")
+    except Exception as e:
+        logger.error(f"Failed to load default model: {e}")
+    yield  # application runs here
+    # (shutdown logic could go here if needed)
+
+
 # Initialize FastAPI app
 app = FastAPI(
     title="XAI Agents API",
@@ -32,6 +68,7 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan,
 )
 
 # CORS middleware
@@ -43,10 +80,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Global model store (in production, use proper model registry)
-MODEL_STORE = {}
-EXPLAINER_CACHE = {}
-
 
 # Request/Response Models
 class PredictionRequest(BaseModel):
@@ -55,13 +88,14 @@ class PredictionRequest(BaseModel):
     features: List[float] = Field(..., description="Input features for prediction")
     model_name: str = Field(default="default", description="Model name to use")
 
-    class Config:
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "features": [0.5, -0.3, 1.2, 0.8, -0.5, 0.2, 0.9, -0.1, 0.4, 0.7],
                 "model_name": "default",
             }
         }
+    }
 
 
 class ExplanationRequest(BaseModel):
@@ -74,8 +108,8 @@ class ExplanationRequest(BaseModel):
         default=100, description="Number of samples for explanation"
     )
 
-    class Config:
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "features": [0.5, -0.3, 1.2, 0.8, -0.5, 0.2, 0.9, -0.1, 0.4, 0.7],
                 "model_name": "default",
@@ -83,6 +117,7 @@ class ExplanationRequest(BaseModel):
                 "num_samples": 100,
             }
         }
+    }
 
 
 class BatchPredictionRequest(BaseModel):
@@ -133,33 +168,6 @@ class ModelInfo(BaseModel):
     type: str
     loaded: bool
     features: int
-
-
-# Startup event - Load default model
-@app.on_event("startup")
-async def startup_event():
-    """Load default model on startup"""
-    logger.info("Starting XAI Agents API...")
-
-    # Create a simple default model
-    try:
-        np.random.seed(42)
-        X_train = np.random.randn(1000, 10)
-        y_train = (X_train[:, 0] + X_train[:, 1] > 0).astype(int)
-
-        model = BaselineModel(model_type="logistic", random_state=42)
-        model.train(X_train, y_train)
-
-        MODEL_STORE["default"] = {
-            "model": model,
-            "type": "logistic",
-            "features": 10,
-            "background_data": X_train,
-        }
-
-        logger.info("Default model loaded successfully")
-    except Exception as e:
-        logger.error(f"Failed to load default model: {e}")
 
 
 # Health Check Endpoint
@@ -232,16 +240,15 @@ async def predict(request: PredictionRequest):
 
     # Make prediction
     try:
-        model = model_info["model"]
-        X = np.array(request.features).reshape(1, -1)
+        model_info["model"]
+        np.array(request.features).reshape(1, -1)
 
-        prob = model.predict_proba(X)[0]
         pred_class = int(prob > 0.5)
 
         latency = (time.time() - start_time) * 1000
 
         return PredictionResponse(
-            prediction=float(prob),
+            prediction=prob,
             prediction_class=pred_class,
             confidence=float(max(prob, 1 - prob)),
             model_name=request.model_name,
@@ -268,8 +275,9 @@ async def predict_batch(request: BatchPredictionRequest):
 
     try:
         X = np.array(request.features_batch)
-        probs = model.predict_proba(X)
-        pred_classes = (probs > 0.5).astype(int)
+
+        probs = model.predict_proba(X)  # shape: (n,)
+        pred_classes = (probs > 0.5).astype(int)  # shape: (n,)
 
         return {
             "predictions": probs.tolist(),
@@ -312,8 +320,7 @@ async def explain_prediction(request: ExplanationRequest):
         model = model_info["model"]
         X = np.array(request.features).reshape(1, -1)
 
-        # Make prediction
-        prob = model.predict_proba(X)[0]
+        prob = float(model.predict_proba(X)[0])
         pred_class = int(prob > 0.5)
 
         # Generate explanation
@@ -357,7 +364,7 @@ async def explain_prediction(request: ExplanationRequest):
                 explanation_data[key] = value
 
         return ExplanationResponse(
-            prediction=float(prob),
+            prediction=prob,
             prediction_class=pred_class,
             explanation=explanation_data,
             method=request.method,

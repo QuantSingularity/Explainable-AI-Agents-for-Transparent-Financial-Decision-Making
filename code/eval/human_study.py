@@ -240,6 +240,8 @@ class CounterfactualGenerator:
         # Iteratively modify features
         changes = {}
 
+        pred = None
+
         for iteration in range(max_iterations):
             # Try modifying each feature
             best_improvement = 0
@@ -305,12 +307,15 @@ class CounterfactualGenerator:
                 if pred == desired_class:
                     break
 
+        if hasattr(model, "predict") and pred is not None:
+            achieved = bool(pred == desired_class)
+        else:
+            achieved = False
+
         return {
             "original_instance": dict(zip(feature_names, X_orig)),
             "counterfactual_instance": dict(zip(feature_names, X_counter)),
             "changes": changes,
-            "achieved_desired_class": (
-                pred == desired_class if hasattr(model, "predict") else False
-            ),
+            "achieved_desired_class": achieved,
             "final_probability": current_prob,
         }

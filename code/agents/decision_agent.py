@@ -141,14 +141,15 @@ class DecisionAgent:
             }
 
         elif self.model_type == "tree":
-            decision_path = self.model.decision_path([X[idx]]).toarray()[0]
+
+            decision_path = self.model.decision_path(X[idx : idx + 1]).toarray()[0]
             feature_importance = dict(
                 zip(self.feature_names, self.model.feature_importances_)
             )
             return {
                 "type": "decision_path",
                 "feature_importance": feature_importance,
-                "path": decision_path,
+                "path": decision_path.tolist(),
             }
 
         else:

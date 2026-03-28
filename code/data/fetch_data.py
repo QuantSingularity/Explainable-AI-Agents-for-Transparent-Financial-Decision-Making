@@ -10,6 +10,20 @@ from sklearn.preprocessing import StandardScaler
 from loguru import logger
 from typing import Tuple
 
+# Continuous feature names that should be scaled.
+# These are the raw (pre-encoding) numeric columns produced by
+# _generate_synthetic_lending_data.  After pd.get_dummies the encoded
+# boolean columns are kept as-is; only the original numeric columns are
+# scaled.
+_CONTINUOUS_FEATURES = [
+    "credit_score",
+    "annual_income",
+    "debt_to_income",
+    "employment_length",
+    "loan_amount",
+    "interest_rate",
+]
+
 
 class DataFetcher:
     """
@@ -180,10 +194,18 @@ class DataFetcher:
             X, y, test_size=0.2, random_state=self.seed, stratify=y
         )
 
-        # Scale continuous features (first 6 are continuous in our synthetic data)
+        continuous_indices = [
+            i for i, col in enumerate(feature_cols) if col in _CONTINUOUS_FEATURES
+        ]
+
         scaler = StandardScaler()
-        X_train[:, :6] = scaler.fit_transform(X_train[:, :6])
-        X_test[:, :6] = scaler.transform(X_test[:, :6])
+        if continuous_indices:
+            X_train[:, continuous_indices] = scaler.fit_transform(
+                X_train[:, continuous_indices]
+            )
+            X_test[:, continuous_indices] = scaler.transform(
+                X_test[:, continuous_indices]
+            )
 
         logger.info(f"Train/test split: {len(X_train)} train, {len(X_test)} test")
 

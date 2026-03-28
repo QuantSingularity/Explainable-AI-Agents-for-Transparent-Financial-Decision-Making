@@ -3,8 +3,14 @@ Prometheus Metrics Integration for XAI API
 Tracks prediction latency, explanation time, and model performance
 """
 
-from prometheus_client import Counter, Histogram, Gauge, generate_latest
-from fastapi import Response
+from prometheus_client import (
+    Counter,
+    Histogram,
+    Gauge,
+    generate_latest,
+    CONTENT_TYPE_LATEST,
+)
+
 
 # Define metrics
 prediction_counter = Counter(
@@ -86,6 +92,14 @@ def track_cache_access(cache_type: str, hit: bool):
         cache_misses.labels(cache_type=cache_type).inc()
 
 
-def get_metrics() -> Response:
-    """Generate Prometheus metrics"""
-    return Response(content=generate_latest(), media_type="text/plain")
+def get_metrics():
+    """
+    Generate Prometheus metrics response.
+
+    Returns a FastAPI/Starlette Response object with the correct content-type.
+    The import is deferred so this module can be used without FastAPI installed
+    (e.g. in unit tests that only need the counter helpers).
+    """
+    from fastapi import Response
+
+    return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)

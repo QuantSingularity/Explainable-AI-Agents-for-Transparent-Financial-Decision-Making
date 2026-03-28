@@ -220,8 +220,8 @@ class IntegratedGradientsExplainer(XAIMethod):
                 X_minus = interpolated.copy()
                 X_minus[:, i] -= eps
 
-                pred_plus = self.model.predict_proba(X_plus)
-                pred_minus = self.model.predict_proba(X_minus)
+                pred_plus = self.model.predict_proba(X_plus)  # shape (n,)
+                pred_minus = self.model.predict_proba(X_minus)  # shape (n,)
 
                 grad[:, i] = (pred_plus - pred_minus) / (2 * eps)
 
@@ -257,12 +257,14 @@ class CounterfactualExplainer(XAIMethod):
             original_pred = self.model.predict_proba(instance.reshape(1, -1))[0]
             original_class = int(original_pred > 0.5)
 
-            if target_class is None:
-                target_class = 1 - original_class
+            instance_target_class = (
+                target_class if target_class is not None else 1 - original_class
+            )
 
             # Simple random perturbation search
             best_cf = instance.copy()
             best_distance = float("inf")
+            found = False
 
             for _ in range(max_iterations):
                 # Random perturbation
@@ -270,17 +272,19 @@ class CounterfactualExplainer(XAIMethod):
                 pred = self.model.predict_proba(perturbed.reshape(1, -1))[0]
                 pred_class = int(pred > 0.5)
 
-                if pred_class == target_class:
+                if pred_class == instance_target_class:
                     distance = np.linalg.norm(perturbed - instance)
                     if distance < best_distance:
                         best_distance = distance
                         best_cf = perturbed
+                        found = True
 
             counterfactuals.append(
                 {
                     "original": instance,
                     "counterfactual": best_cf,
                     "distance": best_distance,
+                    "found": found,
                 }
             )
 

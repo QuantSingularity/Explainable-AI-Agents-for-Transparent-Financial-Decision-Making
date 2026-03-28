@@ -96,14 +96,20 @@ class XAIAgent:
 
             # Handle different SHAP output formats
             if isinstance(shap_values, list):
-                shap_values = shap_values[1]  # For binary classification
+                shap_values = shap_values[1]  # For binary classification, use class 1
 
             attributions = dict(zip(self.feature_names, shap_values[0]))
+
+            expected_value = self.explainer.expected_value
+            if isinstance(expected_value, (list, np.ndarray)):
+                expected_value = float(expected_value[1])
+            else:
+                expected_value = float(expected_value)
 
             return {
                 "method": "shap",
                 "attributions": attributions,
-                "base_value": float(self.explainer.expected_value),
+                "base_value": expected_value,
                 "instance_values": dict(zip(self.feature_names, instance[0])),
             }
 

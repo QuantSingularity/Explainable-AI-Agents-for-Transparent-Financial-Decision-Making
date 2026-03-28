@@ -7,12 +7,26 @@ import time
 from typing import Dict, Any, Optional
 from datetime import datetime
 from loguru import logger
+import numpy as np
 
 from agents.decision_agent import DecisionAgent
 from agents.xai_agent import XAIAgent
 from agents.explanation_agent import ExplanationAgent
 from agents.evidence_collector import EvidenceCollector
 from agents.privacy import PIIRedactor
+
+
+class _NumpyEncoder(json.JSONEncoder):
+    """JSON encoder that handles numpy scalar and array types."""
+
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super().default(obj)
 
 
 class Orchestrator:
@@ -162,13 +176,13 @@ class Orchestrator:
         """Add explanation to audit log."""
         log_entry = {
             "timestamp": explanation["timestamp"],
-            "instance_id": explanation["instance_id"],
-            "decision": explanation["decision"]["prediction"],
-            "probability": explanation["decision"]["probability"],
+            "instance_id": int(explanation["instance_id"]),
+            "decision": int(explanation["decision"]["prediction"]),
+            "probability": float(explanation["decision"]["probability"]),
             "xai_method": explanation["xai_explanation"]["method"],
-            "faithfulness": explanation["xai_explanation"]["faithfulness"],
+            "faithfulness": float(explanation["xai_explanation"]["faithfulness"]),
             "top_features": explanation["narrative"]["top_features"],
-            "elapsed_time": explanation["metadata"]["elapsed_time_seconds"],
+            "elapsed_time": float(explanation["metadata"]["elapsed_time_seconds"]),
             # Store hash of original data for audit (not the actual PII)
             "data_hash": hash(str(sorted(original_data.items()))),
         }
@@ -176,10 +190,15 @@ class Orchestrator:
         self.audit_log.append(log_entry)
 
     def save_audit_log(self, filepath: str):
-        """Save audit log to JSONL file."""
+        """Save audit log to JSONL file.
+
+        Uses a custom JSON encoder to handle numpy scalar types that may
+        appear in audit entries (e.g. np.float64 from model outputs).
+        """
         with open(filepath, "w") as f:
             for entry in self.audit_log:
-                f.write(json.dumps(entry) + "\n")
+
+                f.write(json.dumps(entry, cls=_NumpyEncoder) + "\n")
 
         logger.info(f"Audit log saved to {filepath} ({len(self.audit_log)} entries)")
 

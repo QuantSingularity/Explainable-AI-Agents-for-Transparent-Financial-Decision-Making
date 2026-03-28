@@ -3,7 +3,7 @@ Comprehensive evaluation metrics for XAI methods.
 """
 
 import numpy as np
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from scipy import stats
 
 
@@ -161,7 +161,7 @@ class XAIEvaluator:
             try:
                 perturbed_exp = explainer_fn(X_perturbed)
                 perturbed_attrs.append(list(perturbed_exp["attributions"].values()))
-            except:
+            except Exception:
                 continue
 
         if not perturbed_attrs:
@@ -182,8 +182,8 @@ class XAIEvaluator:
         X: np.ndarray,
         attributions: Dict[str, float],
         feature_names: List[str],
-        explainer_fn: callable = None,
-    ) -> Dict[str, float]:
+        explainer_fn: Optional[callable] = None,
+    ) -> Dict[str, Any]:
         """
         Run all evaluation metrics.
 
