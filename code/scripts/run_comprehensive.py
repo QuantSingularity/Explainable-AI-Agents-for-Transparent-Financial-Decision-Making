@@ -221,7 +221,7 @@ def run_comprehensive_experiment(mode: str = "full", seed: int = 42):
             n_iterations=1000,
         )
 
-        logger.info(f"\nSHAP vs LIME Faithfulness:")
+        logger.info("\nSHAP vs LIME Faithfulness:")
         logger.info(f"  Difference: {faith_test['observed_difference']:.4f}")
         logger.info(
             f"  95% CI: [{faith_test['ci_lower']:.4f}, {faith_test['ci_upper']:.4f}]"
@@ -248,7 +248,7 @@ def run_comprehensive_experiment(mode: str = "full", seed: int = 42):
 
     # Compute effect sizes
     effect_sizes = human_sim.compute_effect_sizes(human_df)
-    logger.info(f"\nEffect Sizes (Narrative vs No Explanation):")
+    logger.info("\nEffect Sizes (Narrative vs No Explanation):")
     logger.info(
         f"  Trust: Cohen's d = {effect_sizes['trust_cohens_d']:.3f}, p = {effect_sizes['trust_p_value']:.4f}"
     )

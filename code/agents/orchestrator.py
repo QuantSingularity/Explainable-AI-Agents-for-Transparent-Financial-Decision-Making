@@ -115,7 +115,7 @@ class Orchestrator:
         }
 
         # Step 2: Collect evidence
-        logger.debug(f"Step 2: Collecting evidence")
+        logger.debug("Step 2: Collecting evidence")
         model_metadata = {
             "model_type": self.decision_agent.model_type,
             "training_samples": len(X),
@@ -138,7 +138,7 @@ class Orchestrator:
         evidence["faithfulness_score"] = faithfulness
 
         # Step 4: Generate narrative explanation
-        logger.debug(f"Step 4: Generating narrative explanation")
+        logger.debug("Step 4: Generating narrative explanation")
         explanation_output = self.explanation_agent.generate_explanation(
             decision_output, xai_output, evidence, applicant_data_clean
         )

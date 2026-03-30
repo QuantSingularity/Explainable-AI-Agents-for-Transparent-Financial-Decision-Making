@@ -66,7 +66,7 @@ class TestModels:
         assert probas.shape == (len(X_test), 2)
         assert all(p in [0, 1] for p in predictions)
 
-        print(f"✓ Logistic regression trained and tested")
+        print("✓ Logistic regression trained and tested")
 
     def test_decision_tree(self):
         """Test decision tree model."""
@@ -84,7 +84,7 @@ class TestModels:
         assert len(predictions) == len(X_test)
         assert all(p in [0, 1] for p in predictions)
 
-        print(f"✓ Decision tree trained and tested")
+        print("✓ Decision tree trained and tested")
 
 
 class TestExperimentResults:
@@ -95,7 +95,7 @@ class TestExperimentResults:
         results_file = "results/quick_run/experiment_results.csv"
         assert os.path.exists(results_file), f"Results file not found: {results_file}"
 
-        print(f"✓ Experiment results file exists")
+        print("✓ Experiment results file exists")
 
     def test_results_content(self):
         """Test results file content."""
@@ -138,7 +138,7 @@ class TestFigures:
             size = os.path.getsize(fig)
             assert size > 50000, f"Figure {fig} too small: {size} bytes"
 
-        print(f"✓ All 5 required figures exist and are properly sized")
+        print("✓ All 5 required figures exist and are properly sized")
 
 
 if __name__ == "__main__":

@@ -72,7 +72,7 @@ def main():
     print(f"  Training samples: {len(X_train)}")
     print(f"  Test samples: {len(X_test)}")
     print(f"  Features: {len(feature_names)}")
-    print(f"  ✓ Data generated successfully\n")
+    print("  ✓ Data generated successfully\n")
 
     # Step 2: Train Baseline Models
     print("Step 2: Training Baseline Models...")
@@ -115,14 +115,14 @@ def main():
     shap_explainer = SHAPExplainer(best_model, background_data=X_train[:500])
     shap_result = shap_explainer.explain(X_explain, nsamples=100)
     print(f"     Computation time: {shap_result['computation_time_ms']:.2f}ms")
-    print(f"     ✓ SHAP explanations generated")
+    print("     ✓ SHAP explanations generated")
 
     # LIME
     print("\n  3b. LIME Explanations...")
     lime_explainer = LIMEExplainer(best_model, feature_names=feature_names)
     lime_result = lime_explainer.explain(X_explain, num_samples=500)
     print(f"     Computation time: {lime_result['computation_time_ms']:.2f}ms")
-    print(f"     ✓ LIME explanations generated")
+    print("     ✓ LIME explanations generated")
 
     # Method Recommendation
     print("\n  3c. XAI Method Recommendation...")
@@ -133,7 +133,7 @@ def main():
         time_budget_ms=500,
     )
     print(f"     Recommended method: {recommended}")
-    print(f"     ✓ Method selection completed\n")
+    print("     ✓ Method selection completed\n")
 
     # Step 4: Extract Feature Importance
     print("Step 4: Extracting Feature Importance...")
@@ -147,7 +147,7 @@ def main():
         for idx in top_features_idx:
             print(f"    {feature_names[idx]}: {importance[idx]:.4f}")
 
-    print(f"\n  ✓ Feature importance extracted\n")
+    print("\n  ✓ Feature importance extracted\n")
 
     # Step 5: Generate Visualizations
     print("Step 5: Generating Publication-Quality Visualizations...")
@@ -182,7 +182,7 @@ def main():
     }
 
     viz.generate_all_figures(viz_data)
-    print(f"  ✓ All visualizations generated in 'visualizations/' directory\n")
+    print("  ✓ All visualizations generated in 'visualizations/' directory\n")
 
     # Step 6: Performance Summary
     print("Step 6: Performance Summary...")
@@ -233,11 +233,11 @@ def main():
     print("  ✓ Production-ready API implementation available")
     print("  ✓ Full deployment and monitoring setup included")
     print("\nGenerated Outputs:")
-    print(f"  📊 Visualizations: visualizations/ (8 figures)")
-    print(f"  📄 Documentation: docs/")
-    print(f"  🧪 Tests: tests_comprehensive/")
-    print(f"  🚀 API: api/api_server.py")
-    print(f"  🐳 Deployment: deployment/")
+    print("  📊 Visualizations: visualizations/ (8 figures)")
+    print("  📄 Documentation: docs/")
+    print("  🧪 Tests: tests_comprehensive/")
+    print("  🚀 API: api/api_server.py")
+    print("  🐳 Deployment: deployment/")
     print()
     print("For detailed XAI method selection guidance, see:")
     print("  docs/XAI_METHOD_SELECTION_GUIDE.md")

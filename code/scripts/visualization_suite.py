@@ -175,7 +175,7 @@ class VisualizationSuite:
         costs = [
             cost_map.get(comparison_data[m]["computational_cost"], 2) for m in methods
         ]
-        bars = ax.barh(
+        ax.barh(
             methods,
             costs,
             color=[
@@ -196,7 +196,7 @@ class VisualizationSuite:
             time_str = comparison_data[m]["typical_time_ms"]
             avg_time = np.mean([float(x) for x in time_str.split("-")])
             times.append(avg_time)
-        bars = ax.barh(
+        ax.barh(
             methods,
             times,
             color=[
@@ -263,7 +263,7 @@ class VisualizationSuite:
                 if any(uc.lower() in case.lower() for case in cases):
                     matrix[i, j] = 1
 
-        im = ax.imshow(matrix, cmap="RdYlGn", aspect="auto", vmin=0, vmax=1)
+        ax.imshow(matrix, cmap="RdYlGn", aspect="auto", vmin=0, vmax=1)
         ax.set_xticks(range(len(use_cases)))
         ax.set_yticks(range(len(methods)))
         ax.set_xticklabels(use_cases, rotation=45, ha="right")
@@ -273,7 +273,7 @@ class VisualizationSuite:
         # Add text annotations
         for i in range(len(methods)):
             for j in range(len(use_cases)):
-                text = ax.text(
+                ax.text(
                     j,
                     i,
                     "✓" if matrix[i, j] else "✗",

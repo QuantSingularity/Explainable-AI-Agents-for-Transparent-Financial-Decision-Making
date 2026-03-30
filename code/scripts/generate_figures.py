@@ -355,7 +355,7 @@ def generate_human_trust_plot(output_dir: str):
     # Subplot 1: Trust Scores
     ax = axes[0]
     x = np.arange(len(conditions))
-    bars = ax.bar(
+    ax.bar(
         x,
         trust_scores,
         yerr=trust_std,
@@ -384,7 +384,7 @@ def generate_human_trust_plot(output_dir: str):
 
     # Subplot 2: Task Performance
     ax = axes[1]
-    bars = ax.bar(
+    ax.bar(
         x,
         task_performance,
         yerr=task_std,

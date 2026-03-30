@@ -233,7 +233,7 @@ class StatisticalTester:
         # Bootstrap resampling
         bootstrap_diffs = []
         combined = np.concatenate([sample1, sample2])
-        n1, n2 = len(sample1), len(sample2)
+        n1, _n2 = len(sample1), len(sample2)
 
         for _ in range(n_iterations):
             # Resample with replacement

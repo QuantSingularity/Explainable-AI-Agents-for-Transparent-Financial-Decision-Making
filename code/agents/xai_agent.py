@@ -36,7 +36,10 @@ class XAIAgent:
         if self.method == "shap":
             # Use KernelExplainer for model-agnostic explanations
             if hasattr(model, "predict_proba"):
-                predict_fn = lambda x: model.predict_proba(x)[:, 1]
+
+                def predict_fn(x):
+                    return model.predict_proba(x)[:, 1]
+
             else:
                 # For neural nets
                 def predict_fn(x):

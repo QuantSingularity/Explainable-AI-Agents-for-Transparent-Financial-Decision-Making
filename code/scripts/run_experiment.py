@@ -28,9 +28,9 @@ def run_experiment(mode: str = "quick", seed: int = 42, n_folds: int = 1):
         seed: Random seed
         n_folds: Number of cross-validation folds (1 = single split)
     """
-    logger.info(f"=" * 60)
+    logger.info("=" * 60)
     logger.info(f"Starting experiment: mode={mode}, seed={seed}")
-    logger.info(f"=" * 60)
+    logger.info("=" * 60)
 
     # Setup results directory
     results_dir = f"results/{mode}_run"

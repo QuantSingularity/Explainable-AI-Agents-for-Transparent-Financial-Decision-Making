@@ -126,15 +126,15 @@ PRIMARY DECISION FACTORS:
                 )
             text += "\n"
 
-        text += f"\nMODEL METHODOLOGY:\n"
+        text += "\nMODEL METHODOLOGY:\n"
         text += f"This decision was made using a {evidence.get('model_type', 'machine learning')} model "
         text += f"trained on {evidence.get('training_samples', 'historical')} loan applications. "
         text += (
             f"The explanation was generated using {method} to ensure transparency.\n"
         )
 
-        text += f"\nREGULATORY COMPLIANCE:\n"
-        text += f"This decision complies with applicable fair lending regulations [Fair Lending Act]. "
+        text += "\nREGULATORY COMPLIANCE:\n"
+        text += "This decision complies with applicable fair lending regulations [Fair Lending Act]. "
         text += f"The model has been validated for disparate impact [Validation Report v{evidence.get('validation_version', '1.0')}].\n"
 
         return {"text": text, "citations": citations}
@@ -167,13 +167,13 @@ Feature Attribution Analysis:
 
             text += f"{rank}. {feature}={value}, attribution={attribution:+.6f}\n"
 
-        text += f"\nModel Performance (on validation set):\n"
+        text += "\nModel Performance (on validation set):\n"
         text += f"- ROC-AUC: {evidence.get('model_auc', 0.72):.3f}\n"
         text += f"- Precision: {evidence.get('model_precision', 0.68):.3f}\n"
         text += f"- Recall: {evidence.get('model_recall', 0.71):.3f}\n"
 
         text += f"\nExplanation Faithfulness: {evidence.get('faithfulness_score', 0.75):.3f}\n"
-        text += f"(Measured as prediction change when top-k features masked)\n"
+        text += "(Measured as prediction change when top-k features masked)\n"
 
         return {"text": text, "citations": citations}
 
@@ -218,8 +218,8 @@ Feature Attribution Analysis:
             text += "- Waiting for your financial situation to improve\n"
             text += "- Consulting with a financial advisor\n"
 
-        text += f"\nThis decision was made using objective criteria applied consistently to all applicants. "
-        text += f"If you have questions, please contact our support team.\n"
+        text += "\nThis decision was made using objective criteria applied consistently to all applicants. "
+        text += "If you have questions, please contact our support team.\n"
 
         return {"text": text, "citations": citations}
 
