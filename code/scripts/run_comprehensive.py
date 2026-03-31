@@ -2,27 +2,28 @@
 Comprehensive experiment runner with all models, methods, and evaluation.
 """
 
+import json
 import os
 import sys
-import json
 import time
+
 import numpy as np
 import pandas as pd
+from loguru import logger
 from sklearn.metrics import (
-    roc_auc_score,
+    accuracy_score,
+    f1_score,
     precision_score,
     recall_score,
-    f1_score,
-    accuracy_score,
+    roc_auc_score,
 )
-from loguru import logger
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from data.fetch_data import DataFetcher
 from agents.orchestrator import Orchestrator
-from eval.metrics import XAIEvaluator, StatisticalTester
-from eval.human_study import HumanStudySimulator, CounterfactualGenerator
+from data.fetch_data import DataFetcher
+from eval.human_study import CounterfactualGenerator, HumanStudySimulator
+from eval.metrics import StatisticalTester, XAIEvaluator
 
 # Configure logging
 logger.remove()

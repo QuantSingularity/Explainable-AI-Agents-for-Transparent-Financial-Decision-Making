@@ -2,21 +2,22 @@
 Main experiment runner: trains models, generates explanations, computes metrics.
 """
 
-import os
-import sys
 import argparse
 import json
+import os
+import sys
 import time
+
 import numpy as np
 import pandas as pd
-from sklearn.metrics import roc_auc_score, precision_score, recall_score, accuracy_score
 from loguru import logger
+from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
 
 # Add parent directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from data.fetch_data import DataFetcher
 from agents.orchestrator import Orchestrator
+from data.fetch_data import DataFetcher
 
 
 def run_experiment(mode: str = "quick", seed: int = 42, n_folds: int = 1):

@@ -3,12 +3,13 @@ Data fetcher and processor for lending datasets.
 """
 
 import os
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
+from loguru import logger
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from loguru import logger
-from typing import Tuple
 
 # Continuous feature names that should be scaled.
 # These are the raw (pre-encoding) numeric columns produced by

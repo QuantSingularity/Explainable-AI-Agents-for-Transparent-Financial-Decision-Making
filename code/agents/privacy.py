@@ -3,7 +3,8 @@ Privacy: PII redaction and safeguards.
 """
 
 import re
-from typing import Dict, Any
+from typing import Any, Dict
+
 from loguru import logger
 
 

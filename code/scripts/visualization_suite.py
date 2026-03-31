@@ -3,13 +3,13 @@ Publication-Quality Visualization Suite
 Generates 6-8 figures for system architecture, XAI comparisons, and results
 """
 
+from typing import Any, Dict, List, Optional
+
 import matplotlib.pyplot as plt
 import numpy as np
-from typing import Dict, List, Any, Optional
 import pandas as pd
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 from matplotlib.patheffects import withStroke
-
 
 # Set publication-quality defaults
 plt.rcParams["figure.dpi"] = 300

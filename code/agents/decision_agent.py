@@ -2,14 +2,15 @@
 Decision Agent: Makes financial decisions with optional interpretable constraints.
 """
 
+from typing import Any, Dict, Optional, Tuple
+
 import numpy as np
-from typing import Dict, Any, Optional, Tuple
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 import torch
 import torch.nn as nn
 from loguru import logger
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
 
 
 class DecisionAgent:

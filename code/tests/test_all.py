@@ -2,16 +2,17 @@
 Unit tests for XAI Finance Agents
 """
 
-import pytest
-import numpy as np
-import sys
 import os
+import sys
+
+import numpy as np
+import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from agents.decision_agent import DecisionAgent
+from agents.privacy import ExplanationSanityChecker, PIIRedactor
 from agents.xai_agent import XAIAgent
-from agents.privacy import PIIRedactor, ExplanationSanityChecker
 from data.fetch_data import DataFetcher
 
 

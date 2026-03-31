@@ -3,22 +3,23 @@ Baseline Models for Comparison
 Implements Logistic Regression, Random Forest, and Neural Network baselines
 """
 
+import time
+from typing import Any, Dict, Tuple
+
+import joblib
 import numpy as np
-from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.neural_network import MLPClassifier
-from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
-    roc_auc_score,
     accuracy_score,
-    precision_score,
-    recall_score,
     f1_score,
     log_loss,
+    precision_score,
+    recall_score,
+    roc_auc_score,
 )
-import time
-from typing import Dict, Any, Tuple
-import joblib
+from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
 
 
 class BaselineModel:

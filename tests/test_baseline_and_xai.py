@@ -3,19 +3,20 @@ Comprehensive Testing Suite with 80%+ Coverage
 Unit tests for agents, XAI methods, and integration tests
 """
 
-import pytest
-import numpy as np
-import sys
 import os
+import sys
+
+import numpy as np
+import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from models.baseline_models import BaselineModel, BaselineComparator
+from models.baseline_models import BaselineComparator, BaselineModel
 from xai.xai_methods import (
-    SHAPExplainer,
-    LIMEExplainer,
-    IntegratedGradientsExplainer,
     CounterfactualExplainer,
+    IntegratedGradientsExplainer,
+    LIMEExplainer,
+    SHAPExplainer,
     XAIMethodSelector,
 )
 

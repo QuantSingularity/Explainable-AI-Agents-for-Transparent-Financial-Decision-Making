@@ -3,24 +3,25 @@ Production FastAPI REST API for XAI Agents
 Provides endpoints for model prediction and explanation generation
 """
 
+import logging
+import os
+import sys
+import time
 from contextlib import asynccontextmanager
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+
+import numpy as np
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from typing import List, Dict, Any, Optional
-import numpy as np
-import uvicorn
-import logging
-import time
-from datetime import datetime
-import sys
-import os
 
 # Add parent directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "code"))
 
 from models.baseline_models import BaselineModel
-from xai.xai_methods import SHAPExplainer, LIMEExplainer, XAIMethodSelector
+from xai.xai_methods import LIMEExplainer, SHAPExplainer, XAIMethodSelector
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

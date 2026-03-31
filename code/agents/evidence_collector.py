@@ -2,7 +2,8 @@
 Evidence Collector: Gathers supporting data, policies, and context for explanations.
 """
 
-from typing import Dict, Any, List
+from typing import Any, Dict, List
+
 import numpy as np
 from loguru import logger
 

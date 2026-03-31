@@ -4,16 +4,16 @@ Orchestrator: Coordinates multi-agent workflow for explainable decisions.
 
 import json
 import time
-from typing import Dict, Any, Optional
 from datetime import datetime
-from loguru import logger
-import numpy as np
+from typing import Any, Dict, Optional
 
+import numpy as np
 from agents.decision_agent import DecisionAgent
-from agents.xai_agent import XAIAgent
-from agents.explanation_agent import ExplanationAgent
 from agents.evidence_collector import EvidenceCollector
+from agents.explanation_agent import ExplanationAgent
 from agents.privacy import PIIRedactor
+from agents.xai_agent import XAIAgent
+from loguru import logger
 
 
 class _NumpyEncoder(json.JSONEncoder):

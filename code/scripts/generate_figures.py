@@ -2,12 +2,13 @@
 Generate publication-ready figures from experiment results.
 """
 
+import argparse
 import os
 import sys
-import argparse
-import pandas as pd
-import numpy as np
+
 import matplotlib
+import numpy as np
+import pandas as pd
 
 matplotlib.use("Agg")  # Non-interactive backend
 import matplotlib.pyplot as plt

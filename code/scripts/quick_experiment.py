@@ -2,16 +2,17 @@
 Streamlined experiment runner that works with minimal dependencies.
 """
 
+import json
 import os
 import sys
-import json
+
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import precision_score, recall_score, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import roc_auc_score, precision_score, recall_score
+from sklearn.tree import DecisionTreeClassifier
 
 # Setup paths
 sys.path.insert(0, os.path.dirname(__file__))

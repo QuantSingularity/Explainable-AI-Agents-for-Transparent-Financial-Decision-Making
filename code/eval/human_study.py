@@ -2,9 +2,10 @@
 Synthetic human study simulator for trust and decision quality evaluation.
 """
 
+from typing import Any, Dict, List
+
 import numpy as np
 import pandas as pd
-from typing import Dict, Any, List
 from loguru import logger
 
 

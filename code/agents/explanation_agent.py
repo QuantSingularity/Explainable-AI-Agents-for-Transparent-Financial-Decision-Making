@@ -3,8 +3,9 @@ Explanation Agent: Generates narrative explanations conditioned on XAI outputs.
 Uses LLM-style prompt templates with evidence citation.
 """
 
-from typing import Dict, Any, List
 import re
+from typing import Any, Dict, List
+
 from loguru import logger
 
 

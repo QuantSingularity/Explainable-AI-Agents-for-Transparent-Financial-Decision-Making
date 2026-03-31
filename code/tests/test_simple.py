@@ -2,15 +2,16 @@
 Simplified unit tests (without PyTorch dependency)
 """
 
-import pytest
-import sys
 import os
+import sys
+
+import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
+from data.fetch_data import DataFetcher
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
-from data.fetch_data import DataFetcher
 
 
 class TestDataFetcher:

@@ -3,17 +3,18 @@ Comprehensive Demo Script
 Demonstrates all enhanced features: baselines, XAI methods, visualizations, and API
 """
 
-import numpy as np
-import pandas as pd
 import sys
 from pathlib import Path
+
+import numpy as np
+import pandas as pd
 
 # Add paths
 sys.path.insert(0, str(Path(__file__).parent.parent / "code"))
 
 from models.baseline_models import BaselineComparator
-from xai.xai_methods import SHAPExplainer, LIMEExplainer, XAIMethodSelector
 from scripts.visualization_suite import VisualizationSuite
+from xai.xai_methods import LIMEExplainer, SHAPExplainer, XAIMethodSelector
 
 
 def generate_synthetic_data(n_samples=2000, n_features=15, random_state=42):
